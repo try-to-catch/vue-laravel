@@ -15,6 +15,7 @@ import { createApp } from 'vue';
 // import ExampleComponent from './components/ExampleComponent.vue';
 import PostComponent from "./components/PostComponent.vue";
 
+
 const app = createApp({components: {PostComponent}});
 
 
