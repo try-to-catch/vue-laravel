@@ -19,8 +19,8 @@
             <td>{{ user.age }}</td>
             <td>{{ user.job }}</td>
             <td>
-                <router-link :to="{name: 'user.edit', params: { user: user.id}}">
-                    <a class="btn btn-primary">Edit</a>
+                <router-link :to="{name: 'user.edit', params: { user: user.id}}" class="btn btn-primary">
+                    Edit
                 </router-link>
             </td>
             <td>
@@ -42,7 +42,7 @@ export default {
     methods: {
         get() {
             axios.get('/api/users').then((res) => {
-                this.users = res.data;
+                this.users = res.data.data;
             });
         },
         remove(id) {

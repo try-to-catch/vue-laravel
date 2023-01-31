@@ -1,69 +1,48 @@
 <template>
-    <form class="w-50 d-flex flex-column pt-4">
-        <captioned-field v-for="(field,id) in fields"
-                         @change="change(id, $event)"
-                         :key="field.label"
-                         :caption="field.label"
-                         :value="field.value"
-                         :type="field.type"
-        />
+    <form v-if="user" class="w-50 d-flex flex-column pt-4">
+        <label class="form-label">
+            Name
+            <input v-model="user.name" type="text" class="mb-2 form-control">
+        </label>
 
-        <button @click.prevent="add" type="submit" class="btn btn-primary">Register</button>
+        <label class="form-label">
+            Age
+            <input v-model="user.age" type="number" class="mb-2 form-control">
+        </label>
+
+        <label class="form-label">
+            Job
+            <input v-model="user.job" type="text" class="mb-2 form-control">
+        </label>
+
+        <button :disabled="!isDisabled" @click.prevent="add" type="submit" class="btn btn-primary">Register</button>
     </form>
 </template>
 
 <script>
-import CaptionedField from "./../../components/formItems/CaptionedField.vue";
-import router from "./../../router";
 
 export default {
     name: "Create",
-    components: {
-        CaptionedField
-    },
     data: function () {
         return {
-            fields: [
-                {
-                    label: 'Name',
-                    value: null,
-                    type: 'text'
-                },
-                {
-                    label: 'Age',
-                    value: null,
-                    type: 'Number'
-                },
-                {
-                    label: 'Job',
-                    value: null,
-                    type: 'text'
-                }
-            ]
+            user: {
+                name: null,
+                age: null,
+                job: null
+            }
         }
     },
     methods: {
-        change(id, value) {
-            this.fields[id].value = value;
-        },
         add() {
-            axios.post('/api/users', this.preparedData).then((res) => {
-                router.push({name: 'user.index'});
+            axios.post('/api/users', this.user).then(() => {
+                this.$router.push({name: 'user.index'});
             });
         }
     },
-    computed: {
-        preparedData() {
-            return {
-                name: this.fields['0'].value,
-                age: this.fields['1'].value,
-                job: this.fields['2'].value,
-            };
+    computed:{
+        isDisabled(){
+            return this.user.name && /^[0-9]{1,2}$/.test(this.user.age) && this.user.job
         }
-    }
+    },
 };
 </script>
-
-<style scoped>
-
-</style>

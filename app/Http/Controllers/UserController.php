@@ -4,18 +4,20 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\User\StoreUserRequest;
 use App\Http\Requests\User\UpdateUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    public function index(): Response
+    public function index(): AnonymousResourceCollection
     {
         $data = User::select(['id', 'name', 'job', 'age'])->get();
 
-        return response($data);
+        return UserResource::collection($data);
     }
 
 
@@ -25,12 +27,12 @@ class UserController extends Controller
 
         $user = User::create($data);
 
-        return response($user);
+        return response([]);
     }
 
-    public function show(int $id): Response
+    public function show(int $id): UserResource
     {
-        return response(User::find($id));
+        return new UserResource(User::findOrFail($id));
     }
 
 
@@ -38,7 +40,7 @@ class UserController extends Controller
     {
         $data = $request->validated();
         $user->update($data);
-        return response($user);
+        return response([]);
     }
 
     public function destroy(User $user): Response
