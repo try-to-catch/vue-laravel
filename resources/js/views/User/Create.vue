@@ -15,11 +15,13 @@
             <input v-model="user.job" type="text" class="mb-2 form-control">
         </label>
 
-        <button :disabled="!isDisabled" @click.prevent="add" type="submit" class="btn btn-primary">Register</button>
+        <button :disabled="!isDisabled" @click.prevent="addUser(user)" type="submit" class="btn btn-primary">Register</button>
     </form>
 </template>
 
 <script>
+
+import {mapActions} from "vuex";
 
 export default {
     name: "Create",
@@ -33,11 +35,7 @@ export default {
         }
     },
     methods: {
-        add() {
-            axios.post('/api/users', this.user).then(() => {
-                this.$router.push({name: 'user.index'});
-            });
-        }
+        ...mapActions({addUser: 'user/add'})
     },
     computed:{
         isDisabled(){

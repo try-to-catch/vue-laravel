@@ -12,21 +12,14 @@
 <script>
 export default {
     name: "Show",
-    data() {
-        return {
-            user: null
-        };
-    },
-    methods: {
-        get() {
-            axios.get(`/api/users/${this.$route.params.user}`).then((res) => {
-                this.user = res.data.data;
-            })
+    computed: {
+        user() {
+            return this.$store.getters['user/user']
         }
     },
-    created() {
-        this.get();
-    }
+    async created() {
+        this.$store.dispatch('user/getUser', this.$route.params.user);
+    },
 }
 </script>
 

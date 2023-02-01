@@ -1,5 +1,5 @@
 <template>
-    <table class="table">
+    <table v-if="users" class="table">
         <thead>
         <tr>
             <th scope="col">Name</th>
@@ -24,7 +24,7 @@
                 </router-link>
             </td>
             <td>
-                <a @click.prevent="remove(user.id)" class="btn btn-outline-danger">Delete</a>
+                <a @click.prevent="deleteUser(user.id)" class="btn btn-outline-danger">Delete</a>
             </td>
         </tr>
         </tbody>
@@ -32,32 +32,24 @@
 </template>
 
 <script>
+import {mapActions, mapGetters} from "vuex";
+
 export default {
     name: "Index",
-    data() {
-        return {
-            users: []
-        }
+    computed: {
+        ...mapGetters({
+            users: 'user/users'
+        })
     },
     methods: {
-        get() {
-            axios.get('/api/users').then((res) => {
-                this.users = res.data.data;
-            });
-        },
-        remove(id) {
-            axios.delete(`/api/users/${id}`).then(() => {
-                this.get();
-            });
-        }
+        ...mapActions({
+            getUsers: 'user/getUsers',
+            deleteUser: 'user/deleteUser',
+        }),
     },
     created() {
-        this.get();
+        this.getUsers();
     }
 }
 
 </script>
-
-<style scoped>
-
-</style>
